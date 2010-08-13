@@ -293,7 +293,7 @@ static void Rule_compile_c2(Node *node)
 	fprintf(output, "  yyDo(yyPush, %d, 0);", countVariables(node->rule.variables));
       fprintf(output, "\n  yyprintf((stderr, \"%%s\\n\", \"%s\"));", node->rule.name);
       Node_compile_c_ko(node->rule.expression, ko);
-      fprintf(output, "\n  yyprintf((stderr, \"  ok   %%s @ %%s\\n\", \"%s\", yybuf+yypos));", node->rule.name);
+      fprintf(output, "\n  yyprintf((stderr, \"  ok   %%s @ %%s\\n\", \"%s\", yyunmatched()));", node->rule.name);
       if (node->rule.variables)
 	fprintf(output, "  yyDo(yyPop, %d, 0);", countVariables(node->rule.variables));
       fprintf(output, "\n  return 1;");
@@ -301,7 +301,7 @@ static void Rule_compile_c2(Node *node)
 	{
 	  label(ko);
 	  restore(0);
-	  fprintf(output, "\n  yyprintf((stderr, \"  fail %%s @ %%s\\n\", \"%s\", yybuf+yypos));", node->rule.name);
+	  fprintf(output, "\n  yyprintf((stderr, \"  fail %%s @ %%s\\n\", \"%s\", yyunmatched()));", node->rule.name);
 	  fprintf(output, "\n  return 0;");
 	}
       fprintf(output, "\n}");
@@ -398,6 +398,28 @@ YY_LOCAL(int) yyrefill(void)\n\
   return 1;\n\
 }\n\
 \n\
+static char* yyunmatched(void) {\n\
+	static char copy[45];\n\
+	int pos = 0;\n\
+	while (pos < 40) {\n\
+		if (yypos+pos >= yylimit) break;\n\
+		char ch = yybuf[yypos+pos];\n\
+		if (ch == '\\n') {\n\
+			copy[pos++] = '\\\\';\n\
+			copy[pos++] = 'n';\n\
+			break;\n\
+		}\n\
+		copy[pos++] = ch;\n\
+	}\n\
+	if (yypos+pos < yylimit) {\n\
+		copy[pos++]='.';\n\
+		copy[pos++]='.';\n\
+		copy[pos++]='.';\n\
+	}\n\
+	copy[pos] = '\\0';\n\
+	return copy;\n\
+}\n\
+\n\
 YY_LOCAL(int) yymatchDot(void)\n\
 {\n\
   if (yypos >= yylimit && !yyrefill()) return 0;\n\
@@ -411,10 +433,10 @@ YY_LOCAL(int) yymatchChar(int c)\n\
   if (yybuf[yypos] == c)\n\
     {\n\
       ++yypos;\n\
-      yyprintf((stderr, \"  ok   yymatchChar(%c) @ %s\\n\", c, yybuf+yypos));\n\
+      yyprintf((stderr, \"  ok   yymatchChar(%c) @ %s\\n\", c, yyunmatched()));\n\
       return 1;\n\
     }\n\
-  yyprintf((stderr, \"  fail yymatchChar(%c) @ %s\\n\", c, yybuf+yypos));\n\
+  yyprintf((stderr, \"  fail yymatchChar(%c) @ %s\\n\", c, yyunmatched()));\n\
   return 0;\n\
 }\n\
 \n\
@@ -443,10 +465,10 @@ YY_LOCAL(int) yymatchClass(unsigned char *bits)\n\
   if (bits[c >> 3] & (1 << (c & 7)))\n\
     {\n\
       ++yypos;\n\
-      yyprintf((stderr, \"  ok   yymatchClass @ %s\\n\", yybuf+yypos));\n\
+      yyprintf((stderr, \"  ok   yymatchClass @ %s\\n\", yyunmatched()));\n\
       return 1;\n\
     }\n\
-  yyprintf((stderr, \"  fail yymatchClass @ %s\\n\", yybuf+yypos));\n\
+  yyprintf((stderr, \"  fail yymatchClass @ %s\\n\", yyunmatched()));\n\
   return 0;\n\
 }\n\
 \n\
