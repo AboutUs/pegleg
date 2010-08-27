@@ -383,6 +383,7 @@ YY_VARIABLE(YYSTYPE  ) yy;\n\
 YY_VARIABLE(YYSTYPE *) yyval= 0;\n\
 YY_VARIABLE(YYSTYPE *) yyvals= 0;\n\
 YY_VARIABLE(int      ) yyvalslen= 0;\n\
+YY_VARIABLE(long long int) yyaccepted= 0;\n\
 \n\
 YY_LOCAL(int) yyrefill(void)\n\
 {\n\
@@ -524,6 +525,7 @@ YY_LOCAL(void) yyCommit()\n\
     }\n\
   yybegin -= yypos;\n\
   yyend -= yypos;\n\
+  yyaccepted += yypos;\n\
   yypos= yythunkpos= 0;\n\
 }\n\
 \n\
