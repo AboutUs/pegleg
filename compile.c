@@ -379,6 +379,7 @@ YY_VARIABLE(int	     ) yytextmax= 0;\n\
 YY_VARIABLE(yythunk *) yythunks= 0;\n\
 YY_VARIABLE(int	     ) yythunkslen= 0;\n\
 YY_VARIABLE(int      ) yythunkpos= 0;\n\
+YY_VARIABLE(yythunk *) yythisthunk= 0;\n\
 YY_VARIABLE(YYSTYPE  ) yy;\n\
 YY_VARIABLE(YYSTYPE *) yyval= 0;\n\
 YY_VARIABLE(YYSTYPE *) yyvals= 0;\n\
@@ -510,6 +511,7 @@ YY_LOCAL(void) yyDone(void)\n\
   for (pos= 0;  pos < yythunkpos;  ++pos)\n\
     {\n\
       yythunk *thunk= &yythunks[pos];\n\
+      yythisthunk = thunk;\n\
       int yyleng= thunk->end ? yyText(thunk->begin, thunk->end) : thunk->begin;\n\
       yyprintf((stderr, \"DO [%d] %p %s\\n\", pos, thunk->action, yytext));\n\
       thunk->action(yytext, yyleng);\n\
