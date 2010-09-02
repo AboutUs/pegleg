@@ -391,6 +391,10 @@ YY_LOCAL(int) yyrefill(void)\n\
   int yyn;\n\
   while (yybuflen - yypos < 512)\n\
     {\n\
+      if (yybuflen > 2000000) {\n\
+        fprintf(stderr, \"look ahead exceeds 2MB, giving up.\\n\");\n\
+        exit(-1);\n\
+      }\n\
       yybuflen *= 2;\n\
       yybuf= realloc(yybuf, yybuflen);\n\
     }\n\
@@ -478,6 +482,10 @@ YY_LOCAL(void) yyDo(yyaction action, int begin, int end)\n\
 {\n\
   while (yythunkpos >= yythunkslen)\n\
     {\n\
+      if (yythunkslen > 2000000) {\n\
+        fprintf(stderr, \"thunk storage exceeds 2MB, giving up.\\n\");\n\
+        exit(-1);\n\
+      }\n\
       yythunkslen *= 2;\n\
       yythunks= realloc(yythunks, sizeof(yythunk) * yythunkslen);\n\
     }\n\
@@ -495,10 +503,14 @@ YY_LOCAL(int) yyText(int begin, int end)\n\
   else\n\
     {\n\
       while (yytextlen < (yyleng - 1))\n\
-	{\n\
-	  yytextlen *= 2;\n\
-	  yytext= realloc(yytext, yytextlen);\n\
-	}\n\
+      {\n\
+        if (yytextlen > 2000000) {\n\
+          fprintf(stderr, \"yytext exceeds 2MB, giving up.\\n\");\n\
+          exit(-1);\n\
+        }\n\
+        yytextlen *= 2;\n\
+        yytext= realloc(yytext, yytextlen);\n\
+      }\n\
       memcpy(yytext, yybuf + begin, yyleng);\n\
     }\n\
   yytext[yyleng]= '\\0';\n\
