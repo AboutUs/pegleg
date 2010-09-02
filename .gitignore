@@ -1,0 +1,9 @@
+peg
+leg
+*.o
+*.plist
+*.dSYM
+listverter
+wikitext
+domainpage
+whois*
