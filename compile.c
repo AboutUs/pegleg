@@ -315,6 +315,7 @@ static char *header= "\
 #include <stdio.h>\n\
 #include <stdlib.h>\n\
 #include <string.h>\n\
+#include <signal.h>\n\
 ";
 
 static char *preamble= "\
@@ -393,7 +394,7 @@ YY_LOCAL(int) yyrefill(void)\n\
     {\n\
       if (yybuflen > 2000000) {\n\
         fprintf(stderr, \"look ahead exceeds 2MB, giving up.\\n\");\n\
-        exit(-1);\n\
+        raise(SIGINT);\n\
       }\n\
       yybuflen *= 2;\n\
       yybuf= realloc(yybuf, yybuflen);\n\
@@ -484,7 +485,7 @@ YY_LOCAL(void) yyDo(yyaction action, int begin, int end)\n\
     {\n\
       if (yythunkslen > 2000000) {\n\
         fprintf(stderr, \"thunk storage exceeds 2MB, giving up.\\n\");\n\
-        exit(-1);\n\
+        raise(SIGINT);\n\
       }\n\
       yythunkslen *= 2;\n\
       yythunks= realloc(yythunks, sizeof(yythunk) * yythunkslen);\n\
@@ -506,7 +507,7 @@ YY_LOCAL(int) yyText(int begin, int end)\n\
       {\n\
         if (yytextlen > 2000000) {\n\
           fprintf(stderr, \"yytext exceeds 2MB, giving up.\\n\");\n\
-          exit(-1);\n\
+          raise(SIGINT);\n\
         }\n\
         yytextlen *= 2;\n\
         yytext= realloc(yytext, yytextlen);\n\
