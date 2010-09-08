@@ -395,8 +395,8 @@ YY_LOCAL(int) yyrefill(void)\n\
   int yyn;\n\
   while (yybuflen - yypos < 512)\n\
     {\n\
-      if (yybuflen > 2000000) {\n\
-        YY_DIE(\"look ahead exceeds 2MB, giving up.\\n\");\n\
+      if (yybuflen > 10000000) {\n\
+        YY_DIE(\"look ahead exceeds 10MB, giving up.\\n\");\n\
       }\n\
       yybuflen *= 2;\n\
       yybuf= realloc(yybuf, yybuflen);\n\
