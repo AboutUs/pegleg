@@ -359,6 +359,9 @@ static char *preamble= "\
 #else\n\
 # define yyprintf(args)\n\
 #endif\n\
+#ifndef YY_DIE\n\
+# define YY_DIE(args)	fprintf(stderr, args); exit(-1);\n\
+#endif\n\
 #ifndef YYSTYPE\n\
 #define YYSTYPE	int\n\
 #endif\n\
@@ -393,8 +396,7 @@ YY_LOCAL(int) yyrefill(void)\n\
   while (yybuflen - yypos < 512)\n\
     {\n\
       if (yybuflen > 2000000) {\n\
-        fprintf(stderr, \"look ahead exceeds 2MB, giving up.\\n\");\n\
-        raise(SIGINT);\n\
+        YY_DIE(\"look ahead exceeds 2MB, giving up.\\n\");\n\
       }\n\
       yybuflen *= 2;\n\
       yybuf= realloc(yybuf, yybuflen);\n\
@@ -484,8 +486,7 @@ YY_LOCAL(void) yyDo(yyaction action, int begin, int end)\n\
   while (yythunkpos >= yythunkslen)\n\
     {\n\
       if (yythunkslen > 2000000) {\n\
-        fprintf(stderr, \"thunk storage exceeds 2MB, giving up.\\n\");\n\
-        raise(SIGINT);\n\
+        YY_DIE(\"thunk storage exceeds 2MB, giving up.\\n\");\n\
       }\n\
       yythunkslen *= 2;\n\
       yythunks= realloc(yythunks, sizeof(yythunk) * yythunkslen);\n\
@@ -506,8 +507,7 @@ YY_LOCAL(int) yyText(int begin, int end)\n\
       while (yytextlen < (yyleng - 1))\n\
       {\n\
         if (yytextlen > 2000000) {\n\
-          fprintf(stderr, \"yytext exceeds 2MB, giving up.\\n\");\n\
-          raise(SIGINT);\n\
+          YY_DIE(\"yytext exceeds 2MB, giving up.\\n\");\n\
         }\n\
         yytextlen *= 2;\n\
         yytext= realloc(yytext, yytextlen);\n\
