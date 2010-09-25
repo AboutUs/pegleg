@@ -410,7 +410,7 @@ YY_LOCAL(int) yyrefill(void)\n\
 \n\
 YY_LOCAL(void) yyoutput(void) {\n\
 	if (yyselect) {\n\
-		FILE *f = fopen(\"output.txt\", \"a\");\n\
+		FILE *f = fopen(\"selected.txt\", \"a\");\n\
 		fwrite(yybuf, 1, yypos, f);\n\
 		fclose(f);\n\
 		yyselect = 0;\n\
