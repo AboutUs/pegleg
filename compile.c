@@ -389,6 +389,7 @@ YY_VARIABLE(YYSTYPE *) yyval= 0;\n\
 YY_VARIABLE(YYSTYPE *) yyvals= 0;\n\
 YY_VARIABLE(int      ) yyvalslen= 0;\n\
 YY_VARIABLE(long long int) yyaccepted= 0;\n\
+YY_VARIABLE(int      ) yyoutselect= 0;\n\
 \n\
 YY_LOCAL(int) yyrefill(void)\n\
 {\n\
@@ -405,6 +406,15 @@ YY_LOCAL(int) yyrefill(void)\n\
   if (!yyn) return 0;\n\
   yylimit += yyn;\n\
   return 1;\n\
+}\n\
+\n\
+YY_LOCAL(void) yyoutput(void) {\n\
+	if (yyoutselect) {\n\
+		FILE *f = fopen(\"output.txt\", \"a\");\n\
+		fwrite(yybuf, 1, yypos, f);\n\
+		fclose(f);\n\
+		yyoutselect = 0;\n\
+	}\n\
 }\n\
 \n\
 static char* yyunmatched(void) {\n\
@@ -534,6 +544,7 @@ YY_LOCAL(void) yyDone(void)\n\
 \n\
 YY_LOCAL(void) yyCommit()\n\
 {\n\
+	yyoutput();\n\
   if ((yylimit -= yypos))\n\
     {\n\
       memmove(yybuf, yybuf + yypos, yylimit);\n\
