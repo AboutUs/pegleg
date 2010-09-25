@@ -389,7 +389,7 @@ YY_VARIABLE(YYSTYPE *) yyval= 0;\n\
 YY_VARIABLE(YYSTYPE *) yyvals= 0;\n\
 YY_VARIABLE(int      ) yyvalslen= 0;\n\
 YY_VARIABLE(long long int) yyaccepted= 0;\n\
-YY_VARIABLE(int      ) yyoutselect= 0;\n\
+YY_VARIABLE(int      ) yyselect= 0;\n\
 \n\
 YY_LOCAL(int) yyrefill(void)\n\
 {\n\
@@ -409,11 +409,11 @@ YY_LOCAL(int) yyrefill(void)\n\
 }\n\
 \n\
 YY_LOCAL(void) yyoutput(void) {\n\
-	if (yyoutselect) {\n\
+	if (yyselect) {\n\
 		FILE *f = fopen(\"output.txt\", \"a\");\n\
 		fwrite(yybuf, 1, yypos, f);\n\
 		fclose(f);\n\
-		yyoutselect = 0;\n\
+		yyselect = 0;\n\
 	}\n\
 }\n\
 \n\
