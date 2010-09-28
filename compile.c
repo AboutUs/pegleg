@@ -362,6 +362,9 @@ static char *preamble= "\
 #ifndef YY_DIE\n\
 # define YY_DIE(args)	fprintf(stderr, args); exit(-1);\n\
 #endif\n\
+#ifndef YY_OUTPUT\n\
+# define YY_OUTPUT(args)\n\
+#endif\n\
 #ifndef YYSTYPE\n\
 #define YYSTYPE	int\n\
 #endif\n\
@@ -389,7 +392,6 @@ YY_VARIABLE(YYSTYPE *) yyval= 0;\n\
 YY_VARIABLE(YYSTYPE *) yyvals= 0;\n\
 YY_VARIABLE(int      ) yyvalslen= 0;\n\
 YY_VARIABLE(long long int) yyaccepted= 0;\n\
-YY_VARIABLE(int      ) yyselect= 0;\n\
 \n\
 YY_LOCAL(int) yyrefill(void)\n\
 {\n\
@@ -406,15 +408,6 @@ YY_LOCAL(int) yyrefill(void)\n\
   if (!yyn) return 0;\n\
   yylimit += yyn;\n\
   return 1;\n\
-}\n\
-\n\
-YY_LOCAL(void) yyoutput(void) {\n\
-	if (yyselect) {\n\
-		FILE *f = fopen(\"selected.txt\", \"a\");\n\
-		fwrite(yybuf, 1, yypos, f);\n\
-		fclose(f);\n\
-		yyselect = 0;\n\
-	}\n\
 }\n\
 \n\
 static char* yyunmatched(void) {\n\
@@ -544,7 +537,7 @@ YY_LOCAL(void) yyDone(void)\n\
 \n\
 YY_LOCAL(void) yyCommit()\n\
 {\n\
-	yyoutput();\n\
+  YY_OUTPUT((yybuf, yypos));\n\
   if ((yylimit -= yypos))\n\
     {\n\
       memmove(yybuf, yybuf + yypos, yylimit);\n\
