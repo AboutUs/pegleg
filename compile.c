@@ -615,6 +615,7 @@ YY_PARSE(int) YYPARSEFROM(yyrule yystart)\n\
   (void)yyPop;\n\
   (void)yySet;\n\
   (void)yytextmax;\n\
+  (void)yyunmatched;\n\
 }\n\
 \n\
 YY_PARSE(int) YYPARSE(void)\n\
