@@ -387,6 +387,7 @@ YY_VARIABLE(yythunk *) yythunks= 0;\n\
 YY_VARIABLE(int	     ) yythunkslen= 0;\n\
 YY_VARIABLE(int      ) yythunkpos= 0;\n\
 YY_VARIABLE(yythunk *) yythisthunk= 0;\n\
+YY_VARIABLE(char *   ) yythisrule= 0;\n\
 YY_VARIABLE(YYSTYPE  ) yy;\n\
 YY_VARIABLE(YYSTYPE *) yyval= 0;\n\
 YY_VARIABLE(YYSTYPE *) yyvals= 0;\n\
@@ -709,6 +710,7 @@ void Rule_compile_c(Node *node)
   for (n= actions;  n;  n= n->action.list)
     {
       fprintf(output, "YY_ACTION(void) yy%s(char *yytext, int yyleng)\n{\n", n->action.name);
+      fprintf(output, "  yythisrule = \"%s\";\n", n->action.rule->rule.name);
       defineVariables(n->action.rule->rule.variables);
       fprintf(output, "  yyprintf((stderr, \"do yy%s\\n\"));\n", n->action.name);
       fprintf(output, "  %s;\n", n->action.text);
