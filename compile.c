@@ -113,7 +113,7 @@ static void Node_compile_c_ko(Node *node, int ko)
     case Name:
       fprintf(output, "  if (!yy_%s()) goto l%d;", node->name.rule->rule.name, ko);
       if (node->name.variable)
-	fprintf(output, "  yyDo(yySet, %d, 0);", node->name.variable->variable.offset);
+	fprintf(output, "  yyDo(yySet, %d, 0, 0, 0);", node->name.variable->variable.offset);
       break;
 
     case Character:
@@ -132,7 +132,7 @@ static void Node_compile_c_ko(Node *node, int ko)
       break;
 
     case Action:
-      fprintf(output, "  yyDo(yy%s, yybegin, yyend);", node->action.name);
+      fprintf(output, "  yyDo(yy%s, yybegin, yyend, mybegin, myend);", node->action.name);
       break;
 
     case Predicate:
@@ -283,27 +283,28 @@ static void Rule_compile_c2(Node *node)
       int ko= yyl(), safe;
 
       if ((!(RuleUsed & node->rule.flags)) && (node != start))
-	fprintf(stderr, "rule '%s' defined but not used\n", node->rule.name);
+        fprintf(stderr, "rule '%s' defined but not used\n", node->rule.name);
 
       safe= ((Query == node->rule.expression->type) || (Star == node->rule.expression->type));
 
       fprintf(output, "\nYY_RULE(int) yy_%s()\n{", node->rule.name);
+      fprintf(output, "int mybegin=yybegin, myend=yyend;\n");
       if (!safe) save(0);
       if (node->rule.variables)
-	fprintf(output, "  yyDo(yyPush, %d, 0);", countVariables(node->rule.variables));
+        fprintf(output, "  yyDo(yyPush, %d, 0, 0, 0);", countVariables(node->rule.variables));
       fprintf(output, "\n  yyprintf((stderr, \"%%s\\n\", \"%s\"));", node->rule.name);
       Node_compile_c_ko(node->rule.expression, ko);
       fprintf(output, "\n  yyprintf((stderr, \"  ok   %%s @ %%s\\n\", \"%s\", yyunmatched()));", node->rule.name);
       if (node->rule.variables)
-	fprintf(output, "  yyDo(yyPop, %d, 0);", countVariables(node->rule.variables));
+        fprintf(output, "  yyDo(yyPop, %d, 0, 0, 0);", countVariables(node->rule.variables));
       fprintf(output, "\n  return 1;");
       if (!safe)
-	{
-	  label(ko);
-	  restore(0);
-	  fprintf(output, "\n  yyprintf((stderr, \"  fail %%s @ %%s\\n\", \"%s\", yyunmatched()));", node->rule.name);
-	  fprintf(output, "\n  return 0;");
-	}
+        {
+          label(ko);
+          restore(0);
+          fprintf(output, "\n  yyprintf((stderr, \"  fail %%s @ %%s\\n\", \"%s\", yyunmatched()));", node->rule.name);
+          fprintf(output, "\n  return 0;");
+        }
       fprintf(output, "\n}");
     }
 
@@ -349,10 +350,10 @@ static char *preamble= "\
   }\n\
 #endif\n\
 #ifndef YY_BEGIN\n\
-#define YY_BEGIN	( yybegin= yypos, 1)\n\
+#define YY_BEGIN	( mybegin= yybegin= yypos, 1)\n\
 #endif\n\
 #ifndef YY_END\n\
-#define YY_END		( yyend= yypos, 1)\n\
+#define YY_END		( myend= yyend= yypos, 1)\n\
 #endif\n\
 #ifdef YY_DEBUG\n\
 # define yyprintf(args)	fprintf args\n\
@@ -372,7 +373,7 @@ static char *preamble= "\
 #ifndef YY_PART\n\
 \n\
 typedef void (*yyaction)(char *yytext, int yyleng);\n\
-typedef struct _yythunk { int begin, end;  yyaction  action;  struct _yythunk *next; } yythunk;\n\
+typedef struct _yythunk { int begin, end, mybegin, myend;  yyaction  action;  struct _yythunk *next; } yythunk;\n\
 \n\
 YY_VARIABLE(char *   ) yybuf= 0;\n\
 YY_VARIABLE(int	     ) yybuflen= 0;\n\
@@ -485,7 +486,7 @@ YY_LOCAL(int) yymatchClass(unsigned char *bits)\n\
   return 0;\n\
 }\n\
 \n\
-YY_LOCAL(void) yyDo(yyaction action, int begin, int end)\n\
+YY_LOCAL(void) yyDo(yyaction action, int begin, int end, int mybegin, int myend)\n\
 {\n\
   while (yythunkpos >= yythunkslen)\n\
     {\n\
@@ -497,6 +498,8 @@ YY_LOCAL(void) yyDo(yyaction action, int begin, int end)\n\
     }\n\
   yythunks[yythunkpos].begin=  begin;\n\
   yythunks[yythunkpos].end=    end;\n\
+  yythunks[yythunkpos].mybegin=  mybegin;\n\
+  yythunks[yythunkpos].myend=    myend;\n\
   yythunks[yythunkpos].action= action;\n\
   ++yythunkpos;\n\
 }\n\
