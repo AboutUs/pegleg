@@ -369,6 +369,9 @@ static char *preamble= "\
 #ifndef YYSTYPE\n\
 #define YYSTYPE	int\n\
 #endif\n\
+#ifndef mytext\n\
+#define mytext myText(yythisthunk->mybegin, yythisthunk->myend)\n\
+#endif\n\
 \n\
 #ifndef YY_PART\n\
 \n\
@@ -523,6 +526,12 @@ YY_LOCAL(int) yyText(int begin, int end)\n\
     }\n\
   yytext[yyleng]= '\\0';\n\
   return yyleng;\n\
+}\n\
+\n\
+YY_LOCAL(char *) myText(int begin, int end)\n\
+{\n\
+  yyText(begin, end);\n\
+  return yytext;\n\
 }\n\
 \n\
 YY_LOCAL(void) yyDone(void)\n\
