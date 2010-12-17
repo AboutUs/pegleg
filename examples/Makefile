@@ -1,4 +1,4 @@
-EXAMPLES = test rule accept wc dc dcv calc basic
+EXAMPLES = test rule accept wc dc dcv calc basic mediawiki
 
 CFLAGS = -g -O3
 
@@ -6,6 +6,14 @@ DIFF = diff
 TEE = cat >
 
 all : $(EXAMPLES)
+
+mediawiki: .FORCE
+	../leg -o mediawiki.leg.c mediawiki.leg
+	$(CC) $(CFLAGS) -o mediawiki mediawiki.leg.c
+	cat mediawiki.xml | ./$@ | $(TEE) $@.out
+	$(DIFF) $@.ref $@.out
+	rm -f $@.out
+	@echo
 
 test : .FORCE
 	../peg -o test.peg.c test.peg
