@@ -1,76 +1,76 @@
-title_tag ...
-title_tag: AccessibleComputing
-start_tag ...
-start_tag: id
-end_tag ...
-end_tag: id
-whole_tag ...
-whole_tag: redirect
-start_tag ...
-start_tag: revision
-start_tag ...
-start_tag: id
-end_tag ...
-end_tag: id
-start_tag ...
-start_tag: timestamp
-end_tag ...
-end_tag: timestamp
-start_tag ...
-start_tag: contributor
-start_tag ...
-start_tag: username
-end_tag ...
-end_tag: username
-start_tag ...
-start_tag: id
-end_tag ...
-end_tag: id
-end_tag ...
-end_tag: contributor
-whole_tag ...
-whole_tag: minor
-start_tag ...
-start_tag: comment
-end_tag ...
-end_tag: comment
-text_tag ...
-text_tag: 57
-end_tag ...
-end_tag: revision
-title_tag ...
-title_tag: Anarchism
-start_tag ...
-start_tag: id
-end_tag ...
-end_tag: id
-start_tag ...
-start_tag: revision
-start_tag ...
-start_tag: id
-end_tag ...
-end_tag: id
-start_tag ...
-start_tag: timestamp
-end_tag ...
-end_tag: timestamp
-start_tag ...
-start_tag: contributor
-start_tag ...
-start_tag: username
-end_tag ...
-end_tag: username
-start_tag ...
-start_tag: id
-end_tag ...
-end_tag: id
-end_tag ...
-end_tag: contributor
-start_tag ...
-start_tag: comment
-end_tag ...
-end_tag: comment
-text_tag ...
-text_tag: 88239
-end_tag ...
-end_tag: revision
+title_tag: <<<
+title_tag: AccessibleComputing >>>
+start_tag: <<<
+start_tag: id >>>
+end_tag: <<<
+end_tag: id >>>
+whole_tag: <<<
+whole_tag: redirect >>>
+start_tag: <<<
+start_tag: revision >>>
+start_tag: <<<
+start_tag: id >>>
+end_tag: <<<
+end_tag: id >>>
+start_tag: <<<
+start_tag: timestamp >>>
+end_tag: <<<
+end_tag: timestamp >>>
+start_tag: <<<
+start_tag: contributor >>>
+start_tag: <<<
+start_tag: username >>>
+end_tag: <<<
+end_tag: username >>>
+start_tag: <<<
+start_tag: id >>>
+end_tag: <<<
+end_tag: id >>>
+end_tag: <<<
+end_tag: contributor >>>
+whole_tag: <<<
+whole_tag: minor >>>
+start_tag: <<<
+start_tag: comment >>>
+end_tag: <<<
+end_tag: comment >>>
+text_tag: <<
+text_tag: 57 >>
+end_tag: <<<
+end_tag: revision >>>
+title_tag: <<<
+title_tag: Anarchism >>>
+start_tag: <<<
+start_tag: id >>>
+end_tag: <<<
+end_tag: id >>>
+start_tag: <<<
+start_tag: revision >>>
+start_tag: <<<
+start_tag: id >>>
+end_tag: <<<
+end_tag: id >>>
+start_tag: <<<
+start_tag: timestamp >>>
+end_tag: <<<
+end_tag: timestamp >>>
+start_tag: <<<
+start_tag: contributor >>>
+start_tag: <<<
+start_tag: username >>>
+end_tag: <<<
+end_tag: username >>>
+start_tag: <<<
+start_tag: id >>>
+end_tag: <<<
+end_tag: id >>>
+end_tag: <<<
+end_tag: contributor >>>
+start_tag: <<<
+start_tag: comment >>>
+end_tag: <<<
+end_tag: comment >>>
+text_tag: <<
+text_tag: 88239 >>
+end_tag: <<<
+end_tag: revision >>>

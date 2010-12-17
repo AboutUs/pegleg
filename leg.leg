@@ -97,7 +97,8 @@ primary=	identifier				{ push(makeVariable(yytext)); }
 |		class					{ push(makeClass(yytext)); }
 |		DOT					{ push(makeDot()); }
 |		action					{ push(makeAction(yytext)); }
-|		MYBEGIN					{ push(Sequence_append(makePredicate("YY_MYBEGIN"),makeAction("YY_DOUBLE_TRIPLE_BEGIN(yythisrule)"))); }
+|		MYBEEGIN				{ push(Sequence_append(makePredicate("YY_MYBEGIN"),makeAction("YY_TRIPLE_BEGIN(yythisrule)"))); }
+|		MYBEGIN					{ push(Sequence_append(makePredicate("YY_MYBEGIN"),makeAction("YY_DOUBLE_BEGIN(yythisrule)"))); }
 |		MYEEND					{ push(Sequence_append(makePredicate("YY_MYEND"),makeAction("YY_TRIPLE_END(yythisrule,mytext)"))); }
 |		MYEND					{ push(Sequence_append(makePredicate("YY_MYEND"),makeAction("YY_DOUBLE_END(yythisrule,mytext)"))); }
 |		BEGIN					{ push(makePredicate("YY_BEGIN")); }
@@ -136,7 +137,8 @@ PLUS=		'+' -
 OPEN=		'(' -
 CLOSE=		')' -
 DOT=		'.' -
-MYBEGIN=	'<<' '<'? -
+MYBEGIN=	'<<' -
+MYBEEGIN=	'<<<' -
 MYEND=		'>>' -
 MYEEND=		'>>>' -
 BEGIN=		'<' -
