@@ -82,6 +82,12 @@
 #ifndef YY_END
 #define YY_END		( myend= yyend= yypos, 1)
 #endif
+#ifndef YY_MYBEGIN
+#define YY_MYBEGIN	( mybegin= yybegin= yypos, 1)
+#endif
+#ifndef YY_MYEND
+#define YY_MYEND	( myend= yyend= yypos, 1)
+#endif
 #ifdef YY_DEBUG
 # define yyprintf(args)	fprintf args
 #else
@@ -379,7 +385,7 @@ YY_ACTION(void) yy_8_primary(char *yytext, int yyleng)
 {
   yythisrule = "primary";
   yyprintf((stderr, "do yy_8_primary\n"));
-   push(makePredicate("YY_MYBEGIN")); ;
+   push(Sequence_append(makePredicate("YY_MYBEGIN"),makeAction("YY_DOUBLE_TRIPLE_BEGIN(yythisrule)"))); ;
 }
 YY_ACTION(void) yy_7_primary(char *yytext, int yyleng)
 {
@@ -1095,6 +1101,7 @@ YY_PARSE(int) YYPARSEFROM(yyrule yystart)
   (void)yyPop;
   (void)yySet;
   (void)yytextmax;
+  (void)yyunmatched;
 }
 
 YY_PARSE(int) YYPARSE(void)

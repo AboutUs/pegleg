@@ -1,5 +1,6 @@
 %{
 #include <stdio.h>
+        void YY_DOUBLE_TRIPLE_BEGIN(char *rule) {printf("%s ...\n", rule);}
         void YY_DOUBLE_END(char *rule, char *text) {printf("%s: %d\n", rule, (int)strlen(text));}
         void YY_TRIPLE_END(char *rule, char *text) {printf("%s: %s\n", rule, text);}
 %}
