@@ -1,22 +1,23 @@
 %{
 #include <stdio.h>
-void pip(char *rule, char *text) {printf("%s: %d\n", rule, (int)strlen(text));}
+        void YY_DOUBLE_END(char *rule, char *text) {printf("%s: %d\n", rule, (int)strlen(text));}
+        void YY_TRIPLE_END(char *rule, char *text) {printf("%s: %s\n", rule, text);}
 %}
 
 wikipage = '<page>' - ( xml - )+ '</page>' | .
 - = ' '*
 
-xml = xml-start-tag | xml-end-tag | xml-body
-xml-end-tag = '</' !'page' ( !'>' . )+ '>' -
-xml-start-tag = ( specific-tag | '<' xml-tag-name xml-start-tag-end )
+xml = start-tag | whole-tag | end-tag | body
+start-tag = ( specific-tag | '<' <<< tag-name >>> tag-args? '>' )
+whole-tag = ( specific-tag | '<' <<< tag-name >>> tag-args? '/>' )
+end-tag = '</' !'page' <<< tag-name >>> '>' -
 
-xml-start-tag-end = xml-tag-args? ( '>' | '/>' )
-xml-tag-name = [a-z]+
-xml-tag-args = ( !'>' !'/>' . )+
-xml-body = ( !'<' . )+
+tag-name = [a-z]+
+tag-args = ( !'>' !'/>' . )+
+body = ( !'<' . )+
 
 specific-tag = title-tag | text-tag
-title-tag = '<title>' << ( !'<' . )+ >> '</title>'
+title-tag = '<title>' <<< ( !'<' . )+ >>> '</title>'
 text-tag = '<text xml:space=\"preserve\">' << markup >> '</text>'
 markup = ( !'<' . ) +
 
