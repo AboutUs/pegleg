@@ -355,6 +355,12 @@ static char *preamble= "\
 #ifndef YY_END\n\
 #define YY_END		( myend= yyend= yypos, 1)\n\
 #endif\n\
+#ifndef YY_MYBEGIN\n\
+#define YY_MYBEGIN	( mybegin= yybegin= yypos, 1)\n\
+#endif\n\
+#ifndef YY_MYEND\n\
+#define YY_MYEND	( myend= yyend= yypos, 1)\n\
+#endif\n\
 #ifdef YY_DEBUG\n\
 # define yyprintf(args)	fprintf args\n\
 #else\n\
