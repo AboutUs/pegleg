@@ -1,0 +1,6 @@
+static char *header= "\
+#include <stdio.h>\n\
+#include <stdlib.h>\n\
+#include <string.h>\n\
+#include <signal.h>\n\
+";

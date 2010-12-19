@@ -1,0 +1,50 @@
+
+#ifndef YY_PART
+
+typedef int (*yyrule)();
+
+YY_PARSE(int) YYPARSEFROM(yyrule yystart)
+{
+  int yyok;
+  if (!yybuflen)
+    {
+      yybuflen= 1024;
+      yybuf= malloc(yybuflen);
+      yytextlen= 1024;
+      yytext= malloc(yytextlen);
+      yythunkslen= 32;
+      yythunks= malloc(sizeof(yythunk) * yythunkslen);
+      yyvalslen= 32;
+      yyvals= malloc(sizeof(YYSTYPE) * yyvalslen);
+      yybegin= yyend= yypos= yylimit= yythunkpos= 0;
+    }
+  yybegin= yyend= yypos;
+  yythunkpos= 0;
+  yyval= yyvals;
+  yyok= yystart();
+  if (yyok) yyDone();
+  yyCommit();
+  return yyok;
+  (void)yyrefill;
+  (void)yymatchDot;
+  (void)yymatchChar;
+  (void)yymatchString;
+  (void)yymatchClass;
+  (void)yyDo;
+  (void)yyText;
+  (void)yyDone;
+  (void)yyCommit;
+  (void)yyAccept;
+  (void)yyPush;
+  (void)yyPop;
+  (void)yySet;
+  (void)yytextmax;
+  (void)yyunmatched;
+}
+
+YY_PARSE(int) YYPARSE(void)
+{
+  return YYPARSEFROM(yy_%s);
+}
+
+#endif

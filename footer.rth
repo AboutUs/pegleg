@@ -1,0 +1,52 @@
+static char *footer= "\
+\n\
+#ifndef YY_PART\n\
+\n\
+typedef int (*yyrule)();\n\
+\n\
+YY_PARSE(int) YYPARSEFROM(yyrule yystart)\n\
+{\n\
+  int yyok;\n\
+  if (!yybuflen)\n\
+    {\n\
+      yybuflen= 1024;\n\
+      yybuf= malloc(yybuflen);\n\
+      yytextlen= 1024;\n\
+      yytext= malloc(yytextlen);\n\
+      yythunkslen= 32;\n\
+      yythunks= malloc(sizeof(yythunk) * yythunkslen);\n\
+      yyvalslen= 32;\n\
+      yyvals= malloc(sizeof(YYSTYPE) * yyvalslen);\n\
+      yybegin= yyend= yypos= yylimit= yythunkpos= 0;\n\
+    }\n\
+  yybegin= yyend= yypos;\n\
+  yythunkpos= 0;\n\
+  yyval= yyvals;\n\
+  yyok= yystart();\n\
+  if (yyok) yyDone();\n\
+  yyCommit();\n\
+  return yyok;\n\
+  (void)yyrefill;\n\
+  (void)yymatchDot;\n\
+  (void)yymatchChar;\n\
+  (void)yymatchString;\n\
+  (void)yymatchClass;\n\
+  (void)yyDo;\n\
+  (void)yyText;\n\
+  (void)yyDone;\n\
+  (void)yyCommit;\n\
+  (void)yyAccept;\n\
+  (void)yyPush;\n\
+  (void)yyPop;\n\
+  (void)yySet;\n\
+  (void)yytextmax;\n\
+  (void)yyunmatched;\n\
+}\n\
+\n\
+YY_PARSE(int) YYPARSE(void)\n\
+{\n\
+  return YYPARSEFROM(yy_%s);\n\
+}\n\
+\n\
+#endif\n\
+";
