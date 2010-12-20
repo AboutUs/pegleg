@@ -1,0 +1,289 @@
+static char *preamble= "\
+#ifndef YY_VARIABLE\n\
+#define YY_VARIABLE(T)	static T\n\
+#endif\n\
+#ifndef YY_LOCAL\n\
+#define YY_LOCAL(T)	static T\n\
+#endif\n\
+#ifndef YY_ACTION\n\
+#define YY_ACTION(T)	static T\n\
+#endif\n\
+#ifndef YY_RULE\n\
+#define YY_RULE(T)	static T\n\
+#endif\n\
+#ifndef YY_PARSE\n\
+#define YY_PARSE(T)	T\n\
+#endif\n\
+#ifndef YYPARSE\n\
+#define YYPARSE		yyparse\n\
+#endif\n\
+#ifndef YYPARSEFROM\n\
+#define YYPARSEFROM	yyparsefrom\n\
+#endif\n\
+#ifndef YY_INPUT\n\
+#define YY_INPUT(buf, result, max_size)			\\\n\
+  {							\\\n\
+    int yyc= getchar();					\\\n\
+    result= (EOF == yyc) ? 0 : (*(buf)= yyc, 1);	\\\n\
+    yyprintf((stderr, \"<%c>\", yyc));			\\\n\
+  }\n\
+#endif\n\
+#ifndef YY_BEGIN\n\
+#define YY_BEGIN	( mybegin= yybegin= yypos, 1)\n\
+#endif\n\
+#ifndef YY_END\n\
+#define YY_END		( myend= yyend= yypos, 1)\n\
+#endif\n\
+#ifndef YY_MYBEGIN\n\
+#define YY_MYBEGIN	( mybegin= yybegin= yypos, 1)\n\
+#endif\n\
+#ifndef YY_MYEND\n\
+#define YY_MYEND	( myend= yyend= yypos, 1)\n\
+#endif\n\
+#ifdef YY_DEBUG\n\
+# define yyprintf(args)	fprintf args\n\
+#else\n\
+# define yyprintf(args)\n\
+#endif\n\
+#ifndef YY_DIE\n\
+# define YY_DIE(args)	fprintf(stderr, args); exit(-1);\n\
+#endif\n\
+#ifndef YY_OUTPUT\n\
+# define YY_OUTPUT(args)\n\
+#endif\n\
+#ifndef YYSTYPE\n\
+#define YYSTYPE	int\n\
+#endif\n\
+#ifndef mytext\n\
+#define mytext myText(yythisthunk->mybegin, yythisthunk->myend)\n\
+#endif\n\
+\n\
+#ifndef YY_PART\n\
+\n\
+typedef void (*yyaction)(char *yytext, int yyleng);\n\
+typedef struct _yythunk { int begin, end, mybegin, myend;  yyaction  action;  struct _yythunk *next; } yythunk;\n\
+\n\
+YY_VARIABLE(char *   ) yybuf= 0;\n\
+YY_VARIABLE(int	     ) yybuflen= 0;\n\
+YY_VARIABLE(int	     ) yypos= 0;\n\
+YY_VARIABLE(int	     ) yylimit= 0;\n\
+YY_VARIABLE(char *   ) yytext= 0;\n\
+YY_VARIABLE(int	     ) yytextlen= 0;\n\
+YY_VARIABLE(int	     ) yybegin= 0;\n\
+YY_VARIABLE(int	     ) yyend= 0;\n\
+YY_VARIABLE(int	     ) yytextmax= 0;\n\
+YY_VARIABLE(yythunk *) yythunks= 0;\n\
+YY_VARIABLE(int	     ) yythunkslen= 0;\n\
+YY_VARIABLE(int      ) yythunkpos= 0;\n\
+YY_VARIABLE(yythunk *) yythisthunk= 0;\n\
+YY_VARIABLE(char *   ) yythisrule= 0;\n\
+YY_VARIABLE(YYSTYPE  ) yy;\n\
+YY_VARIABLE(YYSTYPE *) yyval= 0;\n\
+YY_VARIABLE(YYSTYPE *) yyvals= 0;\n\
+YY_VARIABLE(int      ) yyvalslen= 0;\n\
+YY_VARIABLE(long long int) yyaccepted= 0;\n\
+\n\
+YY_LOCAL(int) yyrefill(void)\n\
+{\n\
+  int yyn;\n\
+  while (yybuflen - yypos < 512)\n\
+    {\n\
+      if (yybuflen > 10000000) {\n\
+        YY_DIE(\"look ahead exceeds 10MB, giving up.\\n\");\n\
+      }\n\
+      yybuflen *= 2;\n\
+      yybuf= realloc(yybuf, yybuflen);\n\
+    }\n\
+  YY_INPUT((yybuf + yypos), yyn, (yybuflen - yypos));\n\
+  if (!yyn) return 0;\n\
+  yylimit += yyn;\n\
+  return 1;\n\
+}\n\
+\n\
+static char* yyunmatched(void) {\n\
+	static char copy[45];\n\
+	int pos = 0;\n\
+	while (pos < 40) {\n\
+		if (yypos+pos >= yylimit) break;\n\
+		char ch = yybuf[yypos+pos];\n\
+		if (ch == '\\n') {\n\
+			copy[pos++] = '\\\\';\n\
+			copy[pos++] = 'n';\n\
+			break;\n\
+		}\n\
+		copy[pos++] = ch;\n\
+	}\n\
+	if (yypos+pos < yylimit) {\n\
+		copy[pos++]='.';\n\
+		copy[pos++]='.';\n\
+		copy[pos++]='.';\n\
+	}\n\
+	copy[pos] = '\\0';\n\
+	return copy;\n\
+}\n\
+\n\
+YY_LOCAL(int) yymatchDot(void)\n\
+{\n\
+  if (yypos >= yylimit && !yyrefill()) return 0;\n\
+  ++yypos;\n\
+  return 1;\n\
+}\n\
+\n\
+YY_LOCAL(int) yymatchChar(int c)\n\
+{\n\
+  if (yypos >= yylimit && !yyrefill()) return 0;\n\
+  if (yybuf[yypos] == c)\n\
+    {\n\
+      ++yypos;\n\
+      yyprintf((stderr, \"  ok   yymatchChar(%c) @ %s\\n\", c, yyunmatched()));\n\
+      return 1;\n\
+    }\n\
+  yyprintf((stderr, \"  fail yymatchChar(%c) @ %s\\n\", c, yyunmatched()));\n\
+  return 0;\n\
+}\n\
+\n\
+YY_LOCAL(int) yymatchString(char *s)\n\
+{\n\
+  int yysav= yypos;\n\
+  while (*s)\n\
+    {\n\
+      if (yypos >= yylimit && !yyrefill()) return 0;\n\
+      if (yybuf[yypos] != *s)\n\
+        {\n\
+          yypos= yysav;\n\
+          return 0;\n\
+        }\n\
+      ++s;\n\
+      ++yypos;\n\
+    }\n\
+  return 1;\n\
+}\n\
+\n\
+YY_LOCAL(int) yymatchStringCaseInsensitive(char *s)\n\
+{\n\
+  int yysav= yypos;\n\
+  while (*s)\n\
+    {\n\
+      if (yypos >= yylimit && !yyrefill()) return 0;\n\
+      if (tolower(yybuf[yypos]) != tolower(*s))\n\
+        {\n\
+          yypos= yysav;\n\
+          return 0;\n\
+        }\n\
+      ++s;\n\
+      ++yypos;\n\
+    }\n\
+  return 1;\n\
+}\n\
+\n\
+YY_LOCAL(int) yymatchClass(unsigned char *bits)\n\
+{\n\
+  int c;\n\
+  if (yypos >= yylimit && !yyrefill()) return 0;\n\
+  c= yybuf[yypos];\n\
+  if (bits[c >> 3] & (1 << (c & 7)))\n\
+    {\n\
+      ++yypos;\n\
+      yyprintf((stderr, \"  ok   yymatchClass @ %s\\n\", yyunmatched()));\n\
+      return 1;\n\
+    }\n\
+  yyprintf((stderr, \"  fail yymatchClass @ %s\\n\", yyunmatched()));\n\
+  return 0;\n\
+}\n\
+\n\
+YY_LOCAL(void) yyDo(yyaction action, int begin, int end, int mybegin, int myend)\n\
+{\n\
+  while (yythunkpos >= yythunkslen)\n\
+    {\n\
+      if (yythunkslen > 2000000) {\n\
+        YY_DIE(\"thunk storage exceeds 2MB, giving up.\\n\");\n\
+      }\n\
+      yythunkslen *= 2;\n\
+      yythunks= realloc(yythunks, sizeof(yythunk) * yythunkslen);\n\
+    }\n\
+  yythunks[yythunkpos].begin=  begin;\n\
+  yythunks[yythunkpos].end=    end;\n\
+  yythunks[yythunkpos].mybegin=  mybegin;\n\
+  yythunks[yythunkpos].myend=    myend;\n\
+  yythunks[yythunkpos].action= action;\n\
+  ++yythunkpos;\n\
+}\n\
+\n\
+YY_LOCAL(int) yyText(int begin, int end)\n\
+{\n\
+  int yyleng= end - begin;\n\
+  if (yyleng <= 0)\n\
+    yyleng= 0;\n\
+  else\n\
+    {\n\
+      while (yytextlen < (yyleng - 1))\n\
+      {\n\
+        if (yytextlen > 2000000) {\n\
+          YY_DIE(\"yytext exceeds 2MB, giving up.\\n\");\n\
+        }\n\
+        yytextlen *= 2;\n\
+        yytext= realloc(yytext, yytextlen);\n\
+      }\n\
+      memcpy(yytext, yybuf + begin, yyleng);\n\
+    }\n\
+  yytext[yyleng]= '\\0';\n\
+  return yyleng;\n\
+}\n\
+\n\
+YY_LOCAL(char *) myText(int begin, int end)\n\
+{\n\
+  yyText(begin, end);\n\
+  return yytext;\n\
+}\n\
+\n\
+YY_LOCAL(void) yyDone(void)\n\
+{\n\
+  int pos;\n\
+  for (pos= 0;  pos < yythunkpos;  ++pos)\n\
+    {\n\
+      yythunk *thunk= &yythunks[pos];\n\
+      yythisthunk = thunk;\n\
+      int yyleng= thunk->end ? yyText(thunk->begin, thunk->end) : thunk->begin;\n\
+      yyprintf((stderr, \"DO [%d] %p %s\\n\", pos, thunk->action, yytext));\n\
+      thunk->action(yytext, yyleng);\n\
+    }\n\
+  yythunkpos= 0;\n\
+}\n\
+\n\
+YY_LOCAL(void) yyCommit()\n\
+{\n\
+  YY_OUTPUT((yybuf, yypos));\n\
+  if ((yylimit -= yypos))\n\
+    {\n\
+      memmove(yybuf, yybuf + yypos, yylimit);\n\
+    }\n\
+  yybegin -= yypos;\n\
+  yyend -= yypos;\n\
+  yyaccepted += yypos;\n\
+  yypos= yythunkpos= 0;\n\
+}\n\
+\n\
+YY_LOCAL(int) yyAccept(int tp0)\n\
+{\n\
+  if (tp0)\n\
+    {\n\
+      fprintf(stderr, \"accept denied at %d\\n\", tp0);\n\
+      return 0;\n\
+    }\n\
+  else\n\
+    {\n\
+      yyDone();\n\
+      yyCommit();\n\
+    }\n\
+  return 1;\n\
+}\n\
+\n\
+YY_LOCAL(void) yyPush(char *text, int count)	{ yyval += count; }\n\
+YY_LOCAL(void) yyPop(char *text, int count)	{ yyval -= count; }\n\
+YY_LOCAL(void) yySet(char *text, int count)	{ yyval[count]= yy; }\n\
+\n\
+#endif /* YY_PART */\n\
+\n\
+#define	YYACCEPT	yyAccept(yythunkpos0)\n\
+\n\
+";
