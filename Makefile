@@ -36,7 +36,7 @@ peg.o : peg.c peg.peg-c
 leg.o : leg.c
 
 leg.c : leg.leg
-#	./leg -o $@ $<
+	./leg -o $@ $<
 
 check : peg .FORCE
 	./peg < peg.peg > peg.out

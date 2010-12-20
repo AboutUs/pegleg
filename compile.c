@@ -122,6 +122,8 @@ static void Node_compile_c_ko(Node *node, int ko)
 	int len= strlen(node->string.value);
 	if (1 == len || (2 == len && '\\' == node->string.value[0]))
 	  fprintf(output, "  if (!yymatchChar('%s')) goto l%d;", node->string.value, ko);
+	else if (node->string.caseInsensitive)
+      	  fprintf(output, "  if (!yymatchStringCaseInsensitive(\"%s\")) goto l%d;", node->string.value, ko);
 	else
 	  fprintf(output, "  if (!yymatchString(\"%s\")) goto l%d;", node->string.value, ko);
       }

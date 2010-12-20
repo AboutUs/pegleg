@@ -19,7 +19,7 @@ tag-args = ( !'>' !'/>' . )+
 body = ( !'<' . )+
 
 specific-tag = title-tag | text-tag
-title-tag = '<title>' <<< ( !'<' . )+ >>> '</title>'
+title-tag = '<title>'i <<< ( !'<' . )+ >>> '</title>'i
 text-tag = '<text xml:space=\"preserve\">' << markup >> '</text>'
 markup = ( !'<' . ) +
 

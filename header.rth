@@ -3,4 +3,5 @@ static char *header= "\
 #include <stdlib.h>\n\
 #include <string.h>\n\
 #include <signal.h>\n\
+#include <ctype.h>\n\
 ";

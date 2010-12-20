@@ -32,7 +32,7 @@ struct Variable	 { int type;  Node *next;   char *name;  Node *value;  int offse
 struct Name	 { int type;  Node *next;   Node *rule;  Node *variable;						};
 struct Dot	 { int type;  Node *next;										};
 struct Character { int type;  Node *next;   char *value;								};
-struct String	 { int type;  Node *next;   char *value;								};
+struct String	 { int type;  Node *next;   char *value; int caseInsensitive;						};
 struct Class	 { int type;  Node *next;   unsigned char *value;							};
 struct Action	 { int type;  Node *next;   char *text;	  Node *list;  char *name;  Node *rule;				};
 struct Predicate { int type;  Node *next;   char *text;									};
@@ -85,6 +85,7 @@ extern Node *makeName(Node *rule);
 extern Node *makeDot(void);
 extern Node *makeCharacter(char *text);
 extern Node *makeString(char *text);
+extern Node *makeStringCaseInsensitive(char *text);
 extern Node *makeClass(char *text);
 extern Node *makeAction(char *text);
 extern Node *makePredicate(char *text);
