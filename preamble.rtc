@@ -211,6 +211,7 @@ YY_LOCAL(void) yyDo(yyaction action, int begin, int end, int mybegin, int myend)
 YY_LOCAL(int) yyText(int begin, int end)
 {
   int yyleng= end - begin;
+  yyleng = yyleng < 1000000 ? yyleng : 1000000; // silently truncate rather than die (think this through later)
   if (yyleng <= 0)
     yyleng= 0;
   else
