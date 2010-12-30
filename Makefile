@@ -3,6 +3,7 @@ OFLAGS = -O3 -DNDEBUG
 #OFLAGS = -pg
 
 OBJS = tree.o compile.o
+RT = preamble.rth header.rth footer.rth
 
 all : peg leg
 
@@ -37,6 +38,11 @@ leg.o : leg.c
 
 leg.c : leg.leg
 	./leg -o $@ $<
+
+compile.o : compile.c $(RT)
+
+%.rth : %.rtc
+	perl escape.pl $* < $< > $@
 
 check : peg .FORCE
 	./peg < peg.peg > peg.out
