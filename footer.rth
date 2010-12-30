@@ -41,6 +41,8 @@ YY_PARSE(int) YYPARSEFROM(yyrule yystart)\n\
   (void)yySet;\n\
   (void)yytextmax;\n\
   (void)yyunmatched;\n\
+  (void)yymatchStringCaseInsensitive;\n\
+  (void)myText;\n\
 }\n\
 \n\
 YY_PARSE(int) YYPARSE(void)\n\

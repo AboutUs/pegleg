@@ -40,6 +40,8 @@ YY_PARSE(int) YYPARSEFROM(yyrule yystart)
   (void)yySet;
   (void)yytextmax;
   (void)yyunmatched;
+  (void)yymatchStringCaseInsensitive;
+  (void)myText;
 }
 
 YY_PARSE(int) YYPARSE(void)
