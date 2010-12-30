@@ -3,6 +3,7 @@ leg
 *.o
 *.plist
 *.dSYM
+*.rth
 listverter
 wikitext
 domainpage
